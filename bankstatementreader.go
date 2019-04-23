@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Illuminasy/csvreader"
+	"github.com/illuminasy/csvreader"
 )
 
 const (
