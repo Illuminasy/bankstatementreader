@@ -1,3 +1,6 @@
+## 0.1.4 (May 05, 2019)
+  - Added transaction type instead of credit and debit amount
+
 ## 0.1.3 (April 23, 2019)
   - Fixed import
 
