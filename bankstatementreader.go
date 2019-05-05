@@ -25,8 +25,8 @@ const (
 type TransactionRow struct {
 	Date    time.Time
 	Desc    string
-	Credit  float64
-	Debit   float64
+	Amount  float64
+	Type    string
 	Balance float64
 }
 

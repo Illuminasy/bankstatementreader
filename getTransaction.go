@@ -6,31 +6,39 @@ import (
 	"time"
 )
 
+const (
+	// Credit ...
+	Credit = "credit"
+
+	// Debit ...
+	Debit = "debit"
+)
+
 func getANZTransaction(line []string, firstLine bool) (TransactionRow, error) {
-	var credit float64
-	var debit float64
+	var amount float64
+	var txnType string
 
 	d, err := time.Parse(DateLayout, line[0])
 	if err != nil {
 		return TransactionRow{}, err
 	}
 
-	a, err := strconv.ParseFloat(line[1], 64)
+	amount, err = strconv.ParseFloat(line[1], 64)
 	if err != nil {
 		return TransactionRow{}, err
 	}
 
-	if a > 0 {
-		credit = a
+	if amount > 0 {
+		txnType = Credit
 	} else {
-		debit = a
+		txnType = Debit
 	}
 
 	atr := TransactionRow{
 		Date:   d,
 		Desc:   line[2],
-		Credit: credit,
-		Debit:  debit,
+		Amount: amount,
+		Type:   txnType,
 	}
 
 	return atr, nil
@@ -48,17 +56,19 @@ func getINGTransaction(line []string, firstLine bool) (TransactionRow, error) {
 		return TransactionRow{}, err
 	}
 
-	cr := 0.00
+	amount := 0.00
+	txnType := Credit
 	if len(line[2]) > 0 {
-		cr, err = strconv.ParseFloat(line[2], 64)
+		amount, err = strconv.ParseFloat(line[2], 64)
+		txnType = Credit
 		if err != nil {
 			return TransactionRow{}, err
 		}
 	}
 
-	db := 0.00
 	if len(line[3]) > 0 {
-		db, err = strconv.ParseFloat(line[3], 64)
+		amount, err = strconv.ParseFloat(line[3], 64)
+		txnType = Debit
 		if err != nil {
 			return TransactionRow{}, err
 		}
@@ -72,8 +82,8 @@ func getINGTransaction(line []string, firstLine bool) (TransactionRow, error) {
 	tr := TransactionRow{
 		Date:    d,
 		Desc:    line[1],
-		Credit:  cr,
-		Debit:   db,
+		Amount:  amount,
+		Type:    txnType,
 		Balance: bl,
 	}
 
